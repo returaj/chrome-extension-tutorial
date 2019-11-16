@@ -3,7 +3,7 @@ var contextMenuItem = {
     "title": "SpendMoney",
     "contexts": [ "selection" ]
 };
-chrome.contextMenus.create(contextMenuItem);
+chrome.contextMenus.create(contextMenuItem, () => chrome.runtime.lastError);
 
 function isInt(value) {
     return !isNaN(value) && parseInt(Number(value)) == value && !isNaN(parseInt(value, 10));
@@ -37,5 +37,7 @@ chrome.contextMenus.onClicked.addListener(function(clickData) {
 })
 
 chrome.storage.onChanged.addListener(function(changes, storageName) {
-    chrome.browserAction.setBadgeText({"text": changes.total.newValue.toString()});
+    if(changes.total) {
+        chrome.browserAction.setBadgeText({"text": changes.total.newValue.toString()});
+    }
 })
