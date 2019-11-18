@@ -1,16 +1,17 @@
+function fixedEncodeUri(str) {
+    return encodeURI(str).replace(/%5B/g, '[').replace(/%5D/g, ']');
+}
+
+// context menus
 var contextMenuItem = {
     "id": "vocabLookup",
     "title": "Vocabulary",
     "contexts": [ "selection" ]
 };
 chrome.contextMenus.create(contextMenuItem, () => chrome.runtime.lastError);
-
-function fixedEncodeUri(str) {
-    return encodeURI(str).replace(/%5B/g, '[').replace(/%5D/g, ']');
-}
-
 chrome.contextMenus.onClicked.addListener(function(clickData) {
     if(clickData.menuItemId == "vocabLookup" && clickData.selectionText) {
+        console.log("open vocabulary popup");
         var vocabUrl = "https://www.vocabulary.com/dictionary/" + fixedEncodeUri(clickData.selectionText);
         var createData = {
             "url": vocabUrl,
@@ -23,3 +24,17 @@ chrome.contextMenus.onClicked.addListener(function(clickData) {
         chrome.windows.create(createData, function(){});
     }
 });
+
+
+var dict = new GreDict();
+dict.init();
+// wait for initialization to finish
+setTimeout(() => {
+    chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
+        if (request.type == "requestingDict") {
+            console.log("Message received from browser, sending dictionary");
+            sendResponse({type: "sendingDict", message: dict.inputDict});
+        }
+    });
+}, 1);
+

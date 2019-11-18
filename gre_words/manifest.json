@@ -5,14 +5,14 @@
     "version": "1.0",
 
     "icons": {
-        "128": "icon128.png",
-        "48": "icon48.png",
-        "16": "icon16.png"
+        "128": "icons/icon128.png",
+        "48": "icons/icon48.png",
+        "16": "icons/icon16.png"
     },
 
     "background": {
-        "scripts": [ "eventPage.js" ],
-        "persistent": false
+        "scripts": [ "data.js", "background.js" ],
+        "persistent": true
     },
 
     "content_scripts": [
@@ -23,7 +23,7 @@
     ],
 
     "browser_action": {
-        "default_icon": "icon16.png"
+        "default_icon": "icons/icon16.png"
     },
 
     "permissions": [
