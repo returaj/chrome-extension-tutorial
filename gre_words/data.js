@@ -23,9 +23,10 @@ GreDict.prototype = {
 
     loadDict: function() {
         if (this.inputDict) return;
-        var dataUrl = chrome.runtime.getURL("data/gre.txt");
+        var dataUrl = chrome.runtime.getURL("data/gre.json");
         return this.readDataAsync(dataUrl).then(function(data) {
-            this['inputDict'] = data.split("\n").map(elem => elem.trim());
+            this['inputDict'] = JSON.parse(data);
+            // this['inputDict'] = data.split("\n").map(elem => elem.trim());
         }.bind(this));
-    },
+    }
 };

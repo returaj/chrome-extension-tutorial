@@ -27,14 +27,20 @@ chrome.contextMenus.onClicked.addListener(function(clickData) {
 
 
 var dict = new GreDict();
-dict.init();
+
+function DictData(word, meaning) {
+    this.word = word;
+    this.meaning = meaning;
+}
+
+var a = [new DictData("hi", "hello"), new DictData("how", "when")];
 // wait for initialization to finish
-setTimeout(() => {
+dict.init().then(() => {
     chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
         if (request.type == "requestingDict") {
             console.log("Message received from browser, sending dictionary");
             sendResponse({type: "sendingDict", message: dict.inputDict});
         }
     });
-}, 1);
+})
 
